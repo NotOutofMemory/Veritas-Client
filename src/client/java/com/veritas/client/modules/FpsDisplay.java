@@ -4,6 +4,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.Font;
+import com.veritas.client.ConfigManager;
 
 public class FpsDisplay extends Module{
     public FpsDisplay() {
@@ -11,7 +12,7 @@ public class FpsDisplay extends Module{
     }
 
     public void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTime) {
-        if (!isEnabled()) return;
+        if (!isEnabled("FpsDisplay")) return;
 
 
         Minecraft client = Minecraft.getInstance();
@@ -19,8 +20,10 @@ public class FpsDisplay extends Module{
         Font font = client.font;
 
         int width = client.getWindow().getGuiScaledWidth();
+        int x = ConfigManager.loadConfigI("FpsX");
+        int y = ConfigManager.loadConfigI("FpsY");
 
-        graphics.text(font, Integer.toString(fps), width / 2, 10, 0xFFFFFFFF);
+        graphics.text(font, Integer.toString(fps), x, y, 0xFFFFFFFF);
     }
 
 

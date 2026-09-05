@@ -32,7 +32,7 @@ public class ModuleManager {
         Module m = getModule(name);
         if (m != null) {
             m.toggle();
-            System.out.println(name + " toggled, enabled = " + m.isEnabled());
+            System.out.println(name + " toggled, enabled = " + m.isEnabled(name));
         } else {
             System.out.println("No module found with name: " + name);
         }

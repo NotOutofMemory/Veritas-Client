@@ -18,10 +18,10 @@ public class ModMenu extends Screen { // Extend Screen class for making a Screen
     // Create toggle for module.
     protected void CreateModuleToggle(String Text, int x, int y, Consumer<String> func, String ModuleName) {
         Button toggleButton = Button.builder( // Build the button widget.
-                getToggleLabel(ModuleName, ExampleModClient.moduleManager.getModule(ModuleName).isEnabled()), // Set the text of the button.
+                getToggleLabel(ModuleName, ExampleModClient.moduleManager.getModule(ModuleName).isEnabled(ModuleName)), // Set the text of the button.
                 (btn) -> {
                     func.accept(ModuleName);
-                    boolean nowEnabled = ExampleModClient.moduleManager.getModule(ModuleName).isEnabled(); // Set nowEnabled to the value isEnabled returns in Module.java.
+                    boolean nowEnabled = ExampleModClient.moduleManager.getModule(ModuleName).isEnabled(ModuleName); // Set nowEnabled to the value isEnabled returns in Module.java.
                     btn.setMessage(getToggleLabel(Text, nowEnabled)); // Gets the label from getToggleLabel.
                 }
         ).bounds(x, y, 120, 20).build();

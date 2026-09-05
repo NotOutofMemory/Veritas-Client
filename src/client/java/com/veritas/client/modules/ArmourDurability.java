@@ -16,7 +16,7 @@ public class ArmourDurability extends Module {
     }
 
     public void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTime) {
-        if (!isEnabled()) return; // Check if module is enabled.
+        if (!isEnabled("ArmourDurability")) return; // Check if module is enabled.
 
         // Get screen width and height.
         int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();

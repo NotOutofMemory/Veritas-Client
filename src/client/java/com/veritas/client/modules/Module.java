@@ -1,5 +1,7 @@
 package com.veritas.client.modules;
 
+import com.veritas.client.ConfigManager;
+
 public abstract class Module {
     private final String name;
     private boolean enabled;
@@ -10,15 +12,15 @@ public abstract class Module {
 
     public Module(String name, boolean enabledByDefault) {
         this.name = name;
-        this.enabled = enabledByDefault;
+        this.enabled = ConfigManager.loadConfigB(name);
     }
 
     public String getName() {
         return name;
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public boolean isEnabled(String ModuleName) {
+        return ConfigManager.loadConfigB(ModuleName);
     }
 
     public void toggle() {
@@ -27,6 +29,7 @@ public abstract class Module {
 
     public void setEnabled(boolean value) {
         enabled = value;
+        ConfigManager.saveConfig(name, enabled);
         if (enabled) onEnable();
         else onDisable();
     }

@@ -12,7 +12,7 @@ public class Coords extends Module {
     }
 
     public void render(GuiGraphicsExtractor graphics, DeltaTracker tickCounter) {
-        if (!isEnabled()) return; // Check if module is enabled check Module.java for more info.
+        if (!isEnabled("Coords")) return; // Check if module is enabled check Module.java for more info.
 
         Minecraft client = Minecraft.getInstance(); // Get minecraft instance.
         Player player = client.player; // Get player

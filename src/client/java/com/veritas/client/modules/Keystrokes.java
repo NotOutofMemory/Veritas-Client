@@ -14,7 +14,7 @@ public class Keystrokes extends Module {
     }
 
     public void render(GuiGraphicsExtractor graphics, DeltaTracker tickCounter) {
-        if (!isEnabled()) return; // Check if module is turned on from Module.java.
+        if (!isEnabled("Keystrokes")) return; // Check if module is turned on from Module.java.
 
         Minecraft client = Minecraft.getInstance(); // Get client.
         if (client.player == null) return; // Check if player exists.
