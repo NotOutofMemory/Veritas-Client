@@ -19,9 +19,11 @@ public class ConfigManager{
         public boolean Keystrokes = false;
         public int FpsX = 100;
         public int FpsY = 100;
+        public String FpsDisplayTypeX = "centre";
+        public String FpsDisplayTypeY = "coordinate";
     }
 
-    private static final File FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), "mymod.json");
+    private static final File FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), "veritas.json");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static ModConfigData INSTANCE = load();
 
@@ -63,6 +65,15 @@ public class ConfigManager{
             default -> 0;
         };
     }
+
+    public static String loadConfigS(String key) {
+        return switch (key) {
+            case "FpsDisplayTypeX" -> INSTANCE.FpsDisplayTypeX;
+            case "FpsDisplayTypeY" -> INSTANCE.FpsDisplayTypeY;
+            default -> "";
+        };
+    }
+
     public static void saveConfig(String key, boolean value) {
         switch (key) {
             case "ArmourDurability" -> INSTANCE.ArmourDurability = value;

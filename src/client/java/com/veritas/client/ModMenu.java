@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import java.util.function.Consumer;
 
 public class ModMenu extends Screen { // Extend Screen class for making a Screen like documented in the fabric docs.
+    int ScreenWidth;
 
     public ModMenu(Component title) {
         super(title);
@@ -17,6 +18,8 @@ public class ModMenu extends Screen { // Extend Screen class for making a Screen
 
     // Create toggle for module.
     protected void CreateModuleToggle(String Text, int x, int y, Consumer<String> func, String ModuleName) {
+        int ButtonWidth = 140;
+        ScreenWidth = this.width;
         Button toggleButton = Button.builder( // Build the button widget.
                 getToggleLabel(ModuleName, ExampleModClient.moduleManager.getModule(ModuleName).isEnabled(ModuleName)), // Set the text of the button.
                 (btn) -> {
@@ -32,11 +35,12 @@ public class ModMenu extends Screen { // Extend Screen class for making a Screen
     @Override
     protected void init() { // Pass required args to CreateModuleToggle for buttons.
         CreateModuleToggle("Keystrokes", 40, 40, (func) -> { ToggleModule("Keystrokes"); }, "Keystrokes");
-        CreateModuleToggle("Coords", 170, 40, (func) -> { ToggleModule("Coords"); }, "Coords");
-        CreateModuleToggle("ArmourDurability", 300, 40, (func) -> { ToggleModule("ArmourDurability"); }, "ArmourDurability");
-        CreateModuleToggle("Fps Display", 40, 70, (func) -> { ToggleModule("FpsDisplay"); }, "FpsDisplay");
+        CreateModuleToggle("Coordinates", (ScreenWidth > 280) ? 170 : 40, (ScreenWidth > 280) ? 40 : 70, (func) -> { ToggleModule("Coords"); }, "Coords");
+        CreateModuleToggle("ArmourDurability", (ScreenWidth > 420) ? 300 : 170, (ScreenWidth > 420) ? 40 : 70, (func) -> { ToggleModule("ArmourDurability"); }, "ArmourDurability");
+        CreateModuleToggle("Fps Display", (ScreenWidth > 560) ? 430 : 40, (ScreenWidth > 560) ? 40 : 70, (func) -> { ToggleModule("FpsDisplay"); }, "FpsDisplay");
     }
     private Component getToggleLabel(String Text, boolean Toggled) { // Generate the text for the buttons.
+        System.out.println(ScreenWidth);
         String stateText = Toggled ? "On" : "Off"; // If toggled true set stateText to On else set it to Off.
         return Component.literal(Text+ ": " + stateText); // Return the text.
     }
