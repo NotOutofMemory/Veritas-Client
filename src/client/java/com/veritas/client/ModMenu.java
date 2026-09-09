@@ -40,7 +40,7 @@ public class ModMenu extends Screen { // Extend Screen class for making a Screen
         CreateModuleToggle("Fps Display", (ScreenWidth > 560) ? 430 : 40, (ScreenWidth > 560) ? 40 : 70, (func) -> { ToggleModule("FpsDisplay"); }, "FpsDisplay");
     }
     private Component getToggleLabel(String Text, boolean Toggled) { // Generate the text for the buttons.
-        System.out.println(ScreenWidth);
+        ExampleModClient.LOGGER.info(ScreenWidth);
         String stateText = Toggled ? "On" : "Off"; // If toggled true set stateText to On else set it to Off.
         return Component.literal(Text+ ": " + stateText); // Return the text.
     }

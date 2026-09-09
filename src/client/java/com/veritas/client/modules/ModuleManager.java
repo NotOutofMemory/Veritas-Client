@@ -1,5 +1,7 @@
 package com.veritas.client.modules;
 
+import com.veritas.client.ExampleModClient;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +34,9 @@ public class ModuleManager {
         Module m = getModule(name);
         if (m != null) {
             m.toggle();
-            System.out.println(name + " toggled, enabled = " + m.isEnabled(name));
+            ExampleModClient.LOGGER.info("{} toggled, enabled = {}", name, m.isEnabled(name));
         } else {
-            System.out.println("No module found with name: " + name);
+            ExampleModClient.LOGGER.info("No module found with name: {}", name);
         }
     }
 }

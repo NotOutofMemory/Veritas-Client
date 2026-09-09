@@ -1,14 +1,14 @@
 {
 	"schemaVersion": 1,
 	"id": "veritas-client",
-	"version": "0.0.1-Pre-Alpha",
+	"version": "0.0.2-Pre-Alpha",
 	"name": "Veritas client",
 	"description": "A simple Minecraft client mod. Nothing more",
 	"authors": [
 		"NotOutofMemory"
 	],
 	"contact": {
-		"sources": "https://github.com/Pepijnss/Veritas-Client"
+		"sources": "https://github.com/NotOutofMemory/Veritas-Client"
 	},
 	"license": "GPL-3.0",
 	"icon": "assets/veritas-client/icon.png",
