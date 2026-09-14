@@ -3,8 +3,6 @@ package com.veritas.client;
 import net.fabricmc.loader.api.FabricLoader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.io.File;
 import java.io.FileReader;
@@ -43,7 +41,7 @@ public class ConfigManager{
             ModConfigData data = GSON.fromJson(reader, ModConfigData.class);
             return data != null ? data : new ModConfigData();
         } catch (Exception e) {
-            ExampleModClient.LOGGER.warn(e);
+            VeritasClient.LOGGER.warn(e);
             return new ModConfigData();
         }
     }
@@ -52,7 +50,7 @@ public class ConfigManager{
         try (FileWriter writer = new FileWriter(FILE)) {
             GSON.toJson(INSTANCE, writer);
         } catch (Exception e) {
-            ExampleModClient.LOGGER.warn(e);
+            VeritasClient.LOGGER.warn(e);
         }
     }
 
@@ -93,7 +91,7 @@ public class ConfigManager{
             case "Coords" -> INSTANCE.Coords = value;
             case "FpsDisplay" -> INSTANCE.FpsDisplay = value;
             case "Keystrokes" -> INSTANCE.Keystrokes = value;
-            default -> ExampleModClient.LOGGER.info("Unknown config key: " + key);
+            default -> VeritasClient.LOGGER.info("Unknown config key: " + key);
         }
         saveConfig();
     }
@@ -104,7 +102,7 @@ public class ConfigManager{
             case "FpsY" -> INSTANCE.FpsY = value;
             case "CoordsX" -> INSTANCE.CoordsX = value;
             case "CoordsY" -> INSTANCE.CoordsY = value;
-            default -> ExampleModClient.LOGGER.info("Unknown config key: " + key);
+            default -> VeritasClient.LOGGER.info("Unknown config key: " + key);
         }
         saveConfig();
     }
@@ -115,7 +113,7 @@ public class ConfigManager{
             case "FpsDisplayTypeY" -> INSTANCE.FpsDisplayTypeY = value;
             case "CoordsDisplayTypeX" -> INSTANCE.CoordsDisplayTypeX = value;
             case "CoordsDisplayTypeY" -> INSTANCE.CoordsDisplayTypeY = value;
-            default -> ExampleModClient.LOGGER.info("Unknow config key: " + key);
+            default -> VeritasClient.LOGGER.info("Unknow config key: " + key);
         }
     }
 }

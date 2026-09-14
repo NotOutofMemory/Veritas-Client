@@ -26,7 +26,7 @@ public class Button extends AbstractWidget {
 
 
         graphics.fill(getX(), getY(), getX() + this.width, getY() + this.height, buttonColor);
-        //graphics.fillGradient(getX(), getY(), getX() + this.width, getY() + this.height, startColor, endColor);
+        graphics.fillGradient(getX(), getY(), getX() + this.width, getY() + this.height, startColor, endColor);
     }
 
     @Override

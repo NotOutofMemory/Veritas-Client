@@ -2,7 +2,7 @@ package com.veritas.client;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-//import com.veritas.client.widgets.Button;
+import com.veritas.client.widgets.Button;
 import com.veritas.client.widgets.* ;
 
 public class TestScreen extends Screen {
@@ -10,20 +10,19 @@ public class TestScreen extends Screen {
         super(title);
     }
 
-    @Override
-    protected void init() {
+    protected void testScreen() {
 
 
 
-        // Center the button horizontally, place it slightly above center vertically
-        int buttonX = this.width / 2 - 50; // Half of width (100) subtracted from center
-        int buttonY = this.height / 2 - 10; // Half of height (20) subtracted from center
+        // Centre the button horizontally, place it slightly above centre vertically
+        int buttonX = this.width / 2 - 50; // Half of width (100) subtracted from centre
+        int buttonY = this.height / 2 - 10; // Half of height (20) subtracted from centre
 
         int ScreenWidth = this.width;
         int ScreenHeight = this.height;
 
         // 1. Create your custom button
-        Button myCustomButton = new Button(
+        Button button = new Button(
                 buttonX,
                 buttonY,
                 100, // width
@@ -38,8 +37,8 @@ public class TestScreen extends Screen {
                 (ScreenHeight / 10) * 8
         );
 
-        // 2. Register it so Minecraft updates and draws it automatically
-        this.addRenderableWidget(background);
+        // Let mc update it automatically
+        this.addRenderableWidget(button);
     }
 
     @Override

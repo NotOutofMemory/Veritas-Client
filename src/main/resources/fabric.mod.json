@@ -17,7 +17,7 @@
 		"main": [
 		],
 		"client": [
-			"com.veritas.client.ExampleModClient"
+			"com.veritas.client.VeritasClient"
 		]
 	},
 	"mixins": [

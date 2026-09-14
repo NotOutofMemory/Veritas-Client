@@ -13,7 +13,7 @@ public class ModMenu extends Screen { // Extend Screen class for making a Screen
     }
 
     private void ToggleModule(String Module){
-        ExampleModClient.moduleManager.toggleModule(Module); // Toggle the module using ExampleModClient.
+        VeritasClient.moduleManager.toggleModule(Module); // Toggle the module using ExampleModClient.
     }
 
     // Create toggle for module.
@@ -21,10 +21,10 @@ public class ModMenu extends Screen { // Extend Screen class for making a Screen
         int ButtonWidth = 140;
         ScreenWidth = this.width;
         Button toggleButton = Button.builder( // Build the button widget.
-                getToggleLabel(ModuleName, ExampleModClient.moduleManager.getModule(ModuleName).isEnabled(ModuleName)), // Set the text of the button.
+                getToggleLabel(ModuleName, VeritasClient.moduleManager.getModule(ModuleName).isEnabled(ModuleName)), // Set the text of the button.
                 (btn) -> {
                     func.accept(ModuleName);
-                    boolean nowEnabled = ExampleModClient.moduleManager.getModule(ModuleName).isEnabled(ModuleName); // Set nowEnabled to the value isEnabled returns in Module.java.
+                    boolean nowEnabled = VeritasClient.moduleManager.getModule(ModuleName).isEnabled(ModuleName); // Set nowEnabled to the value isEnabled returns in Module.java.
                     btn.setMessage(getToggleLabel(Text, nowEnabled)); // Gets the label from getToggleLabel.
                 }
         ).bounds(x, y, 120, 20).build();
@@ -40,7 +40,7 @@ public class ModMenu extends Screen { // Extend Screen class for making a Screen
         CreateModuleToggle("Fps Display", (ScreenWidth > 560) ? 430 : 40, (ScreenWidth > 560) ? 40 : 70, (func) -> { ToggleModule("FpsDisplay"); }, "FpsDisplay");
     }
     private Component getToggleLabel(String Text, boolean Toggled) { // Generate the text for the buttons.
-        ExampleModClient.LOGGER.info(ScreenWidth);
+        VeritasClient.LOGGER.info(ScreenWidth);
         String stateText = Toggled ? "On" : "Off"; // If toggled true set stateText to On else set it to Off.
         return Component.literal(Text+ ": " + stateText); // Return the text.
     }

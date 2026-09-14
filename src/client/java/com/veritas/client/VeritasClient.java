@@ -15,7 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 
-public class ExampleModClient implements ClientModInitializer {
+public class VeritasClient implements ClientModInitializer {
 	private static final KeyMapping.Category CATEGORY =
 			KeyMapping.Category.register(Identifier.fromNamespaceAndPath("veritas", "veritasclient"));
 
@@ -29,6 +29,7 @@ public class ExampleModClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		moduleManager = new ModuleManager();
+
 
 		// Run the Keystrokes renderer before the chat loads.
 		HudElementRegistry.attachElementBefore(
@@ -61,19 +62,19 @@ public class ExampleModClient implements ClientModInitializer {
 				GLFW.GLFW_KEY_RIGHT_SHIFT,
 				CATEGORY));
 
-		//openTestMenu = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-		//		"key.veritas.testscreen",
-		//		InputConstants.Type.KEYSYM,
-		//		GLFW.GLFW_KEY_R,
-		//		CATEGORY));
+		KeyMapping openTestMenu = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+				"key.veritas.testscreen",
+				InputConstants.Type.KEYSYM,
+				GLFW.GLFW_KEY_R,
+				CATEGORY));
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (openScreenKey.consumeClick()) {
 				client.gui.setScreen(new ModMenu(Component.literal("Veritas Client ")));
 			}
-			//while (openTestMenu.consumeClick()) {
-			//	client.gui.setScreen(new TestScreen((Component.literal("Test Screen"))));
-			//}
+			while (openTestMenu.consumeClick()) {
+				client.gui.setScreen(new HudEditor((Component.literal("Hud Editor"))));
+			}
 		});
 		ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
 			LOGGER.info("Client stopping!");
