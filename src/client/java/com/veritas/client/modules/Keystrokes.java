@@ -16,6 +16,8 @@ public class Keystrokes extends Module {
     public void render(GuiGraphicsExtractor graphics, DeltaTracker tickCounter) {
         if (!isEnabled("Keystrokes")) return; // Check if module is turned on from Module.java.
 
+        DeltaTracker TickCounter = tickCounter;
+
         Minecraft client = Minecraft.getInstance(); // Get client.
         if (client.player == null) return; // Check if player exists.
 
@@ -44,7 +46,7 @@ public class Keystrokes extends Module {
     }
 
     private static void drawKey(GuiGraphicsExtractor graphics, Minecraft client, int x, int y, String label, boolean active, int width) {
-        // Set text color and background color.
+        // Set text colour and background colour.
         int bgColor = active ? 0x8000FFFF : 0x80000000;
         int textColor = active ? 0xFF000000 : 0xFFFFFFFF;
 
@@ -53,6 +55,28 @@ public class Keystrokes extends Module {
         int textWidth = client.font.width(label);
         int textX = x + (width - textWidth) / 2;
         int textY = y + (BOX - client.font.lineHeight) / 2;
+        graphics.text(client.font, label, textX, textY, textColor, false);
+    }
+
+    public void renderPreview(GuiGraphicsExtractor graphics) {
+        Minecraft client = Minecraft.getInstance();
+
+        int x = 100;
+        int y = 100;
+
+        drawPreviewKey(graphics, client, x, y, "W", BOX);
+    }
+
+    private static void drawPreviewKey(GuiGraphicsExtractor graphics, Minecraft client, int x, int y, String label, int width) {
+        int bgColor = 0x80000000;
+        int textColor = 0xFFFFFFFF;
+
+        graphics.fill(x, y, x + width, y + BOX, bgColor);
+
+        int textWidth = client.font.width(label);
+        int textX = x + (width - textWidth) / 2;
+        int textY = y + (BOX - client.font.lineHeight) / 2;
+
         graphics.text(client.font, label, textX, textY, textColor, false);
     }
 }

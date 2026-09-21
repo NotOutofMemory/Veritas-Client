@@ -4,12 +4,23 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+//import com.mojang.blaze3d.vertex.MultiBufferSource;
 
 public class HudEditor extends Screen {
 
     public HudEditor(Component title) {
         super(title);
     }
+
+    Minecraft client = Minecraft.getInstance();
+
+    //MultiBufferSource
+
+    //GuiGraphicsExtractor guiGraphicsExtractor = new GuiGraphicsExtractor();
+
+    // Will work on later
+    //renderPreview(new GuiGraphicsExtractor());
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
@@ -29,7 +40,6 @@ public class HudEditor extends Screen {
 
 
     public boolean mouseDragged(MouseButtonEvent event, double mouseX, double mouseY) {
-        // Check if the button being dragged is the Left Click (typically button 0)
         if (event.button() == 0) {
             VeritasClient.LOGGER.info("Dragging in HUD Editor at X: {}, Y: {}", mouseX, mouseY);
 

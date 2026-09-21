@@ -13,7 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.glfw.GLFW;
 
 public class VeritasClient implements ClientModInitializer {
 	private static final KeyMapping.Category CATEGORY =
@@ -58,17 +57,19 @@ public class VeritasClient implements ClientModInitializer {
 		// Key to open the mod menu.
 		openScreenKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 				"key.veritas.modmenu",
-				InputConstants.Type.KEYSYM,
-				GLFW.GLFW_KEY_RIGHT_SHIFT,
+				InputConstants.KEY_RSHIFT,
 				CATEGORY));
 
 		KeyMapping openTestMenu = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 				"key.veritas.testscreen",
-				InputConstants.Type.KEYSYM,
-				GLFW.GLFW_KEY_R,
+				InputConstants.KEY_R,
 				CATEGORY));
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			if (openScreenKey == null || openTestMenu == null) {
+				return;
+			}
+
 			while (openScreenKey.consumeClick()) {
 				client.gui.setScreen(new ModMenu(Component.literal("Veritas Client ")));
 			}
@@ -76,6 +77,7 @@ public class VeritasClient implements ClientModInitializer {
 				client.gui.setScreen(new HudEditor((Component.literal("Hud Editor"))));
 			}
 		});
+
 		ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
 			LOGGER.info("Client stopping!");
 			LOGGER.info("Saving config.");
