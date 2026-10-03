@@ -1,82 +1,57 @@
 package com.veritas.client.modules;
 
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public class Keystrokes extends Module {
-    private static final int BOX = 20; // Size of the box that is used for the keystroke
-    private static final int GAP = 2; // Gap in between the boxes of the keystrokes
-    private static final int MARGIN = 10; // Self-explanatory
+    private static final int BOX = 20;  // Size of each key box
+    private static final int GAP = 2;   // Gap between boxes
+    private static final int STEP = BOX + GAP;
+    private static final int MOUSE_W = 31;
+
+    private static final int TOTAL_W = STEP * 3 - GAP;      // 64
+    private static final int TOTAL_H = STEP * 3 + BOX;      // 86
 
     public Keystrokes() {
-        super("Keystrokes"); // Pass module name to Module.java
+        super("Keystrokes");
+        setDefaultPosition(10, 10);
     }
 
-    public void render(GuiGraphicsExtractor graphics, DeltaTracker tickCounter) {
-        if (!isEnabled("Keystrokes")) return; // Check if module is turned on from Module.java.
+    @Override public int getWidth()  { return TOTAL_W; }
+    @Override public int getHeight() { return TOTAL_H; }
 
-        DeltaTracker TickCounter = tickCounter;
+    @Override
+    protected void draw(GuiGraphicsExtractor g, int x, int y, boolean preview) {
+        Minecraft client = Minecraft.getInstance();
+        if (!preview && client.player == null) return;
 
-        Minecraft client = Minecraft.getInstance(); // Get client.
-        if (client.player == null) return; // Check if player exists.
+        boolean w     = !preview && client.options.keyUp.isDown();
+        boolean a     = !preview && client.options.keyLeft.isDown();
+        boolean s     = !preview && client.options.keyDown.isDown();
+        boolean d     = !preview && client.options.keyRight.isDown();
+        boolean space = !preview && client.options.keyJump.isDown();
+        boolean lmb   = !preview && client.options.keyAttack.isDown();
+        boolean rmb   = !preview && client.options.keyUse.isDown();
 
-        int baseX = MARGIN; // Set baseX to MARGIN.
-        int baseY = MARGIN; // Set baseY to MARGIN.
+        drawKey(g, client, x + STEP,     y,            "W", w, BOX);
+        drawKey(g, client, x,            y + STEP,     "A", a, BOX);
+        drawKey(g, client, x + STEP,     y + STEP,     "S", s, BOX);
+        drawKey(g, client, x + STEP * 2, y + STEP,     "D", d, BOX);
+        drawKey(g, client, x,            y + STEP * 2, "SPACE", space, TOTAL_W);
 
-        // Link all actions to variables.
-        boolean w = client.options.keyUp.isDown();
-        boolean a = client.options.keyLeft.isDown();
-        boolean s = client.options.keyDown.isDown();
-        boolean d = client.options.keyRight.isDown();
-        boolean space = client.options.keyJump.isDown();
-        boolean leftClick = client.options.keyAttack.isDown();
-        boolean rightClick = client.options.keyUse.isDown();
-
-        // Draw boxes for keystrokes.
-        drawKey(graphics, client, baseX + BOX + GAP, baseY, "W", w, BOX);
-        drawKey(graphics, client, baseX, baseY + BOX + GAP, "A", a, BOX);
-        drawKey(graphics, client, baseX + BOX + GAP, baseY + BOX + GAP, "S", s, BOX);
-        drawKey(graphics, client, baseX + (BOX + GAP) * 2, baseY + BOX + GAP, "D", d, BOX);
-        drawKey(graphics, client, baseX, baseY + (BOX + GAP) * 2, "SPACE", space, (BOX + GAP) * 3 - GAP);
-
-        // Draw boxes for mouse actions.
-        drawKey(graphics, client, baseX, baseY + ( 3 * (BOX + GAP)), "LMB", leftClick, 31);
-        drawKey(graphics, client, baseX + 33, baseY + ( 3 * (BOX + GAP)), "RMB", rightClick, 31);
+        drawKey(g, client, x,                   y + STEP * 3, "LMB", lmb, MOUSE_W);
+        drawKey(g, client, x + MOUSE_W + GAP,   y + STEP * 3, "RMB", rmb, MOUSE_W);
     }
 
-    private static void drawKey(GuiGraphicsExtractor graphics, Minecraft client, int x, int y, String label, boolean active, int width) {
-        // Set text colour and background colour.
+    private static void drawKey(GuiGraphicsExtractor g, Minecraft client, int x, int y,
+                                String label, boolean active, int width) {
         int bgColor = active ? 0x8000FFFF : 0x80000000;
         int textColor = active ? 0xFF000000 : 0xFFFFFFFF;
 
-        graphics.fill(x, y, x + width, y + BOX, bgColor); // Make a box.
+        g.fill(x, y, x + width, y + BOX, bgColor);
 
-        int textWidth = client.font.width(label);
-        int textX = x + (width - textWidth) / 2;
+        int textX = x + (width - client.font.width(label)) / 2;
         int textY = y + (BOX - client.font.lineHeight) / 2;
-        graphics.text(client.font, label, textX, textY, textColor, false);
-    }
-
-    public static void renderPreview(GuiGraphicsExtractor graphics) {
-        Minecraft client = Minecraft.getInstance();
-
-        int x = 100;
-        int y = 100;
-
-        drawPreviewKey(graphics, client, x, y, "W", BOX);
-    }
-
-    private static void drawPreviewKey(GuiGraphicsExtractor graphics, Minecraft client, int x, int y, String label, int width) {
-        int bgColor = 0x80000000;
-        int textColor = 0xFFFFFFFF;
-
-        graphics.fill(x, y, x + width, y + BOX, bgColor);
-
-        int textWidth = client.font.width(label);
-        int textX = x + (width - textWidth) / 2;
-        int textY = y + (BOX - client.font.lineHeight) / 2;
-
-        graphics.text(client.font, label, textX, textY, textColor, false);
+        g.text(client.font, label, textX, textY, textColor, false);
     }
 }

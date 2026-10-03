@@ -1,48 +1,23 @@
 package com.veritas.client.modules;
 
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.Font;
-import com.veritas.client.ConfigManager;
 
-import java.util.Objects;
-
-public class FpsDisplay extends Module{
+public class FpsDisplay extends Module {
     public FpsDisplay() {
         super("FpsDisplay");
+        setDefaultPosition(10, 110);
     }
 
-    public void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTime) {
-        if (!isEnabled("FpsDisplay")) return;
+    private String text(boolean preview) {
+        return preview ? "120" : Integer.toString(Minecraft.getInstance().getFps());
+    }
 
+    @Override public int getWidth()  { return Minecraft.getInstance().font.width(text(true)); }
+    @Override public int getHeight() { return Minecraft.getInstance().font.lineHeight; }
 
-        Minecraft client = Minecraft.getInstance();
-        int fps = client.getFps();
-        Font font = client.font;
-        
-        int x;
-        int y;
-        int width = client.getWindow().getGuiScaledWidth();
-        
-        if (Objects.equals(ConfigManager.loadConfigS("FpsDisplayTypeY"), "centre")) {
-            y = client.getWindow().getGuiScaledHeight() / 2;
-        } else if (Objects.equals(ConfigManager.loadConfigS("FpsDisplayTypeY"), "coordinate")) {
-            y = ConfigManager.loadConfigI("FpsY");
-        } else {
-            y = 0;
-        }
-
-        if (Objects.equals(ConfigManager.loadConfigS("FpsDisplayTypeX"), "centre")) {
-            x = client.getWindow().getGuiScaledWidth() / 2;
-        } else if (Objects.equals(ConfigManager.loadConfigS("FpsDisplayTypeX"), "coordinate")) {
-            x = ConfigManager.loadConfigI("FpsY");
-        } else {
-            x = 0;
-        }
-
-
-
-        graphics.text(font, Integer.toString(fps), x, y, 0xFFFFFFFF);
+    @Override
+    protected void draw(GuiGraphicsExtractor g, int x, int y, boolean preview) {
+        g.text(Minecraft.getInstance().font, text(preview), x, y, 0xFFFFFFFF);
     }
 }

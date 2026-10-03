@@ -1,96 +1,72 @@
 package com.veritas.client.modules;
 
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-
+import net.minecraft.world.item.Items;
 
 public class ArmourDurability extends Module {
 
+    private static final int ROW_HEIGHT = 15;
+    private static final int ICON_SIZE = 16;
+    private static final int TEXT_OFFSET_X = 15;
+    private static final int TEXT_OFFSET_Y = 4;
+    private static final int PIECES = 4;
 
     public ArmourDurability() {
-        super("ArmourDurability"); // Send name to Module.java
+        super("ArmourDurability");
+        setDefaultPosition(200, 10);
     }
 
-    public void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTime) {
-        if (!isEnabled("ArmourDurability")) return; // Check if module is enabled.
+    private ItemStack[] getPieces(boolean preview) {
+        if (preview) {
+            return new ItemStack[] {
+                    new ItemStack(Items.DIAMOND_HELMET),
+                    new ItemStack(Items.DIAMOND_CHESTPLATE),
+                    new ItemStack(Items.DIAMOND_LEGGINGS),
+                    new ItemStack(Items.DIAMOND_BOOTS)
+            };
+        }
 
-        // Get screen width and height.
-        int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
-        int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+        Player player = Minecraft.getInstance().player;
+        if (player == null) return null;
 
-        // calculate the right edge of the hotbar.
-        int hotbarEdge = (screenWidth / 2) + 91;
+        return new ItemStack[] {
+                player.getSlot(103).get(),
+                player.getSlot(102).get(),
+                player.getSlot(101).get(),
+                player.getSlot(100).get()
+        };
+    }
 
-        // Get the client and player and stop if player has not loaded in yet.
-        Minecraft client = Minecraft.getInstance();
-        Player player = client.player;
-        if (player == null) return; // No player loaded yet.
+    @Override
+    public int getWidth() {
+        return TEXT_OFFSET_X + Minecraft.getInstance().font.width("592");
+    }
 
+    @Override
+    public int getHeight() {
+        return ROW_HEIGHT * (PIECES - 1) + ICON_SIZE;
+    }
 
-        // Get all the items from the armour slots.
-        ItemStack helmet = player.getSlot(103).get();
-        ItemStack chestplate = player.getSlot(102).get();
-        ItemStack leggings = player.getSlot(101).get();
-        ItemStack boots = player.getSlot(100).get();
+    @Override
+    protected void draw(GuiGraphicsExtractor g, int x, int y, boolean preview) {
+        ItemStack[] pieces = getPieces(preview);
+        if (pieces == null) return;
 
-        // Turn all the armour pieces into an array.
-        ItemStack[] armorPieces = {helmet, chestplate, leggings, boots};
+        Font font = Minecraft.getInstance().font;
 
-        // Get the font.
-        Font font = client.font;
+        for (int i = 0; i < pieces.length; i++) {
+            ItemStack piece = pieces[i];
+            if (piece.isEmpty() || !piece.isDamageableItem()) continue;
 
-        // Loop trough all the armour pieces.
-        for (int i = 0; i < armorPieces.length; i++) {
-            if (!armorPieces[i].isEmpty() || armorPieces[i].isDamageableItem()) {
+            int remaining = piece.getMaxDamage() - piece.getDamageValue();
+            int rowY = y + i * ROW_HEIGHT;
 
-                // Get the current damage, max damage and subtract them from each other to get the current damage.
-                int damageValue = armorPieces[i].getDamageValue();
-                int maxDamage = armorPieces[i].getMaxDamage();
-                int currentDamage = maxDamage - damageValue;
-
-                // Set x and y variables empty.
-                int x;
-                int y;
-
-
-                if (i == 0){
-                    // Set x and y.
-                    x = hotbarEdge + 5;
-                    y = screenHeight - 65;
-
-                    // Render the armor piece and the durability text.
-                    graphics.item(armorPieces[i], x, y);
-                    graphics.text(font, String.valueOf(currentDamage), x+15, y+4, 0xFFFFFFFF);
-                } else if (i==1) {
-                    // Set x and y.
-                    x = hotbarEdge + 5;
-                    y = screenHeight - 50;
-
-                    // Render the armor piece and the durability text.
-                    graphics.item(armorPieces[i], x, y);
-                    graphics.text(font, String.valueOf(currentDamage), x+15, y+4, 0xFFFFFFFF);
-                } else if (i==2) {
-                    // Set x and y.
-                    x = hotbarEdge + 5;
-                    y = screenHeight - 35;
-
-                    // Render the armor piece and the durability text.
-                    graphics.item(armorPieces[i], x, y);
-                    graphics.text(font, String.valueOf(currentDamage), x+15, y+4, 0xFFFFFFFF);
-                } else {
-                    // Set x and y.
-                    x = hotbarEdge + 5;
-                    y = screenHeight - 20;
-
-                    // Render the armor piece and the durability text.
-                    graphics.item(armorPieces[i], x, y);
-                    graphics.text(font, String.valueOf(currentDamage), x+15, y+4, 0xFFFFFFFF);
-                }
-            }
+            g.item(piece, x, rowY);
+            g.text(font, String.valueOf(remaining), x + TEXT_OFFSET_X, rowY + TEXT_OFFSET_Y, 0xFFFFFFFF);
         }
     }
 }

@@ -1,47 +1,39 @@
 package com.veritas.client;
 
+import com.veritas.client.modules.Module;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import java.util.function.Consumer;
 
-public class ModMenu extends Screen { // Extend Screen class for making a Screen like documented in the fabric docs.
-    int ScreenWidth;
-
+public class ModMenu extends Screen {
     public ModMenu(Component title) {
         super(title);
     }
 
-    private void ToggleModule(String Module){
-        VeritasClient.moduleManager.toggleModule(Module); // Toggle the module using ExampleModClient.
-    }
+    protected void createModuleToggle(String text, int x, int y, String moduleName) {
+        Module module = VeritasClient.moduleManager.getModule(moduleName);
 
-    // Create toggle for module.
-    protected void CreateModuleToggle(String Text, int x, int y, Consumer<String> func, String ModuleName) {
-        int ButtonWidth = 140;
-        ScreenWidth = this.width;
-        Button toggleButton = Button.builder( // Build the button widget.
-                getToggleLabel(ModuleName, VeritasClient.moduleManager.getModule(ModuleName).isEnabled(ModuleName)), // Set the text of the button.
+        Button toggleButton = Button.builder(
+                getToggleLabel(text, module.isEnabled()),
                 (btn) -> {
-                    func.accept(ModuleName);
-                    boolean nowEnabled = VeritasClient.moduleManager.getModule(ModuleName).isEnabled(ModuleName); // Set nowEnabled to the value isEnabled returns in Module.java.
-                    btn.setMessage(getToggleLabel(Text, nowEnabled)); // Gets the label from getToggleLabel.
+                    VeritasClient.moduleManager.toggleModule(moduleName);
+                    btn.setMessage(getToggleLabel(text, module.isEnabled()));
                 }
         ).bounds(x, y, 120, 20).build();
 
-        this.addRenderableWidget(toggleButton); // Render the actual button.
+        this.addRenderableWidget(toggleButton);
     }
 
     @Override
-    protected void init() { // Pass required args to CreateModuleToggle for buttons.
-        CreateModuleToggle("Keystrokes", 40, 40, (func) -> { ToggleModule("Keystrokes"); }, "Keystrokes");
-        CreateModuleToggle("Coordinates", (ScreenWidth > 280) ? 170 : 40, (ScreenWidth > 280) ? 40 : 70, (func) -> { ToggleModule("Coords"); }, "Coords");
-        CreateModuleToggle("ArmourDurability", (ScreenWidth > 420) ? 300 : 170, (ScreenWidth > 420) ? 40 : 70, (func) -> { ToggleModule("ArmourDurability"); }, "ArmourDurability");
-        CreateModuleToggle("Fps Display", (ScreenWidth > 560) ? 430 : 40, (ScreenWidth > 560) ? 40 : 70, (func) -> { ToggleModule("FpsDisplay"); }, "FpsDisplay");
+    protected void init() {
+        int w = this.width;
+        createModuleToggle("Keystrokes", 40, 40, "Keystrokes");
+        createModuleToggle("Coordinates", (w > 280) ? 170 : 40, (w > 280) ? 40 : 70, "Coords");
+        createModuleToggle("ArmourDurability", (w > 420) ? 300 : 170, (w > 420) ? 40 : 70, "ArmourDurability");
+        createModuleToggle("Fps Display", (w > 560) ? 430 : 40, (w > 560) ? 40 : 70, "FpsDisplay");
     }
-    private Component getToggleLabel(String Text, boolean Toggled) { // Generate the text for the buttons.
-        VeritasClient.LOGGER.info(ScreenWidth);
-        String stateText = Toggled ? "On" : "Off"; // If toggled true set stateText to On else set it to Off.
-        return Component.literal(Text+ ": " + stateText); // Return the text.
+
+    private Component getToggleLabel(String text, boolean toggled) {
+        return Component.literal(text + ": " + (toggled ? "On" : "Off"));
     }
 }

@@ -34,7 +34,7 @@ public class ModuleManager {
         Module m = getModule(name);
         if (m != null) {
             m.toggle();
-            VeritasClient.LOGGER.info("{} toggled, enabled = {}", name, m.isEnabled(name));
+            VeritasClient.LOGGER.info("{} toggled, enabled = {}", name, m.isEnabled());
         } else {
             VeritasClient.LOGGER.info("No module found with name: {}", name);
         }
