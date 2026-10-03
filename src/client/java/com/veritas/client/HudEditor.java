@@ -1,63 +1,49 @@
 package com.veritas.client;
 
+import com.veritas.client.modules.Keystrokes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-//import com.mojang.blaze3d.vertex.MultiBufferSource;
+import com.mojang.blaze3d.vertex.*;
 
 public class HudEditor extends Screen {
-
     public HudEditor(Component title) {
         super(title);
     }
 
-    Minecraft client = Minecraft.getInstance();
+    private void checkCollisions() {
+        Minecraft client = Minecraft.getInstance();
+        double mouseX = client.mouseHandler.xpos() * (double) client.getWindow().getGuiScaledWidth() / (double) client.getWindow().getWidth();
+        double mouseY = client.mouseHandler.xpos() * (double) client.getWindow().getGuiScaledHeight() / (double) client.getWindow().getHeight();
+    }
 
-    //MultiBufferSource
+    @Override
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        renderPreview(graphics);
+    }
 
-    //GuiGraphicsExtractor guiGraphicsExtractor = new GuiGraphicsExtractor();
-
-    // Will work on later
-    //renderPreview(new GuiGraphicsExtractor());
+    public void renderPreview(GuiGraphicsExtractor graphics) {
+        Keystrokes.renderPreview(graphics);
+    }
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (event.button() == 0) {
-            Minecraft client = Minecraft.getInstance();
+        VeritasClient.LOGGER.info("HudEditor clicked");
+        return true;
+    }
 
-            double mouseX = client.mouseHandler.xpos() / client.getWindow().getGuiScale();
-            double mouseY = client.mouseHandler.ypos() / client.getWindow().getGuiScale();
-
-            VeritasClient.LOGGER.info("Left click detected in HUD Editor at X: {}, Y: {}", mouseX, mouseY);
+    @Override
+    public boolean mouseDragged(MouseButtonEvent event, double offsetX, double offsetY) {
+        if (event.button() == 1) {
+            VeritasClient.LOGGER.info("HudEditor dragged, offset {}, {}", offsetX, offsetY);
+            checkCollisions();
 
             return true;
         }
-
-        return super.mouseClicked(event, doubleClick);
+        return super.mouseDragged(event, offsetX, offsetY);
     }
 
-
-    public boolean mouseDragged(MouseButtonEvent event, double mouseX, double mouseY) {
-        if (event.button() == 0) {
-            VeritasClient.LOGGER.info("Dragging in HUD Editor at X: {}, Y: {}", mouseX, mouseY);
-
-            return true;
-        }
-        return super.mouseDragged(event, mouseX, mouseY);
-    }
-
-
-    public double getMouseX() {
-        Minecraft client = Minecraft.getInstance();
-
-        return client.mouseHandler.xpos();
-    }
-
-    public double getMouseY() {
-        Minecraft client = Minecraft.getInstance();
-
-        return client.mouseHandler.ypos();
-    }
 }

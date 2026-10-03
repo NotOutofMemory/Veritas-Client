@@ -58,7 +58,7 @@ public class Keystrokes extends Module {
         graphics.text(client.font, label, textX, textY, textColor, false);
     }
 
-    public void renderPreview(GuiGraphicsExtractor graphics) {
+    public static void renderPreview(GuiGraphicsExtractor graphics) {
         Minecraft client = Minecraft.getInstance();
 
         int x = 100;

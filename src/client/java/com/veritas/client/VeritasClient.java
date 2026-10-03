@@ -60,9 +60,14 @@ public class VeritasClient implements ClientModInitializer {
 				InputConstants.KEY_RSHIFT,
 				CATEGORY));
 
-		KeyMapping openTestMenu = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-				"key.veritas.testscreen",
+		KeyMapping openHudEditor = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+				"key.veritas.hudeditor",
 				InputConstants.KEY_R,
+				CATEGORY));
+
+		KeyMapping openTestMenu = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+				"key.veritas.test",
+				InputConstants.KEY_K,
 				CATEGORY));
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -73,8 +78,11 @@ public class VeritasClient implements ClientModInitializer {
 			while (openScreenKey.consumeClick()) {
 				client.gui.setScreen(new ModMenu(Component.literal("Veritas Client ")));
 			}
+			while (openHudEditor.consumeClick()) {
+				client.setScreenAndShow(new HudEditor(Component.literal("Hud Editor")));
+			}
 			while (openTestMenu.consumeClick()) {
-				client.gui.setScreen(new HudEditor((Component.literal("Hud Editor"))));
+				client.setScreenAndShow(new TestScreen(Component.literal("Test Menu")));
 			}
 		});
 
